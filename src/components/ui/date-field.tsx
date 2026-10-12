@@ -12,7 +12,7 @@ type DateFieldProps = {
   label: string;
   value: Date;
   onChange: (date: Date) => void;
-  mode?: 'date' | 'time';
+  mode?: 'date' | 'time' | 'datetime';
   maximumDate?: Date;
 };
 
@@ -48,13 +48,13 @@ export function DateField({ label, value, onChange, mode = 'date', maximumDate }
         <>
           <Pressable onPress={() => setOpen(true)} style={{ padding: space.sm }}>
             <AppText variant="body" color="gold" weight="600">
-              {mode === 'date' ? formatDate(value) : value.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
+              {mode === 'time' ? value.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : formatDate(value)}
             </AppText>
           </Pressable>
           {open && (
             <DateTimePicker
               value={value}
-              mode={mode}
+              mode={mode === 'datetime' ? 'date' : mode}
               maximumDate={maximumDate}
               onChange={(_, d) => {
                 setOpen(false);

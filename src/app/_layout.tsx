@@ -72,6 +72,7 @@ export default function RootLayout() {
           <Stack.Screen name="guided-prayer" options={immersive} />
           <Stack.Screen name="practice" options={{ ...immersive, gestureEnabled: false }} />
           <Stack.Screen name="trivia-play" options={{ ...immersive, gestureEnabled: false }} />
+          <Stack.Screen name="fast-new" options={fullSheet} />
           <Stack.Screen name="verse-level" options={{ ...sheet, sheetAllowedDetents: [0.55, 1] }} />
         </Stack>
         )}
