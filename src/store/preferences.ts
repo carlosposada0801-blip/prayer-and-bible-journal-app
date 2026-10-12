@@ -1,10 +1,12 @@
 import { useSyncExternalStore } from 'react';
 import { Appearance } from 'react-native';
 
+import type { TranslationId } from '@/data/bible/translations';
+
 import { kv } from './kv';
 
 /**
- * User preferences (appearance, text size, haptics, translation).
+ * User preferences (appearance, reader, translation, reminders…).
  *
  * Saved on-device with SQLite's key-value store and read synchronously
  * at launch, so the app opens in the right theme with no flicker.
@@ -13,13 +15,25 @@ import { kv } from './kv';
 
 export type AppearanceMode = 'system' | 'light' | 'dark';
 export type TextSize = 'small' | 'default' | 'large' | 'xlarge';
-export type TranslationId = 'BSB' | 'WEB' | 'KJV';
+export type ReminderKind = 'study' | 'prayer' | 'practice' | 'person' | 'plan';
+export type Reminder = { enabled: boolean; hour: number; minute: number };
 
 export type Preferences = {
   appearance: AppearanceMode;
   textSize: TextSize;
   haptics: boolean;
   translation: TranslationId;
+  compareTranslation: TranslationId;
+  themeId: string;
+  readerFont: 'serif' | 'sans';
+  readerSpacing: 'compact' | 'normal' | 'relaxed';
+  showVerseNumbers: boolean;
+  speechRate: number;
+  lastRead: { book: number; chapter: number };
+  dailyXpGoal: number;
+  quietMode: boolean;
+  appLock: boolean;
+  reminders: Record<ReminderKind, Reminder>;
 };
 
 export const textScaleFor: Record<TextSize, number> = {
@@ -36,12 +50,31 @@ const defaults: Preferences = {
   textSize: 'default',
   haptics: true,
   translation: 'BSB',
+  compareTranslation: 'KJV',
+  themeId: 'classic',
+  readerFont: 'serif',
+  readerSpacing: 'normal',
+  showVerseNumbers: true,
+  speechRate: 1,
+  lastRead: { book: 43, chapter: 1 },
+  dailyXpGoal: 30,
+  quietMode: false,
+  appLock: false,
+  reminders: {
+    study: { enabled: false, hour: 7, minute: 0 },
+    prayer: { enabled: false, hour: 21, minute: 0 },
+    practice: { enabled: false, hour: 12, minute: 30 },
+    person: { enabled: false, hour: 8, minute: 0 },
+    plan: { enabled: false, hour: 7, minute: 30 },
+  },
 };
 
 function load(): Preferences {
   try {
     const raw = kv.get(STORAGE_KEY);
-    return raw ? { ...defaults, ...JSON.parse(raw) } : defaults;
+    if (!raw) return defaults;
+    const saved = JSON.parse(raw);
+    return { ...defaults, ...saved, reminders: { ...defaults.reminders, ...saved.reminders } };
   } catch {
     return defaults;
   }

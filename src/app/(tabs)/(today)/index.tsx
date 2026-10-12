@@ -27,12 +27,12 @@ type QuickLink = {
   subtitle: string;
   icon: IconName;
   tone: 'gold' | 'sage' | 'sky';
-  href: '/study' | '/memorize' | '/prayer';
+  href: '/bible' | '/grow' | '/prayer';
 };
 
 const quickLinks: QuickLink[] = [
-  { title: "Today's Study", subtitle: '5-minute lesson', icon: 'openBook', tone: 'sky', href: '/study' },
-  { title: 'Practice Verses', subtitle: 'Keep your streak glowing', icon: 'flame', tone: 'gold', href: '/memorize' },
+  { title: "Today's Study", subtitle: '5-minute lesson', icon: 'openBook', tone: 'sky', href: '/bible' },
+  { title: 'Practice Verses', subtitle: 'Keep your streak glowing', icon: 'flame', tone: 'gold', href: '/grow' },
   { title: 'Write a Prayer', subtitle: 'Talk with God', icon: 'pen', tone: 'sage', href: '/prayer' },
 ];
 

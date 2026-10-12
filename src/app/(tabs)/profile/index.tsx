@@ -8,8 +8,8 @@ import {
   usePreferences,
   type AppearanceMode,
   type TextSize,
-  type TranslationId,
 } from '@/store/preferences';
+import { translationInfo, type TranslationId } from '@/data/bible/translations';
 import { useTheme } from '@/theme/use-theme';
 import { space } from '@/theme/tokens';
 
@@ -32,11 +32,6 @@ const translationOptions: { value: TranslationId; label: string }[] = [
   { value: 'KJV', label: 'KJV' },
 ];
 
-const translationNames: Record<TranslationId, string> = {
-  BSB: 'Berean Standard Bible',
-  WEB: 'World English Bible',
-  KJV: 'King James Version',
-};
 
 export default function SettingsScreen() {
   const prefs = usePreferences();
@@ -77,7 +72,7 @@ export default function SettingsScreen() {
             onChange={(v) => setPreference('translation', v)}
           />
           <AppText variant="footnote" color="textTertiary" style={{ paddingHorizontal: space.lg }}>
-            {translationNames[prefs.translation]} · public domain
+            {translationInfo(prefs.translation).name}
           </AppText>
         </View>
       </Appear>

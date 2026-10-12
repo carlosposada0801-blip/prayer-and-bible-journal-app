@@ -1,8 +1,14 @@
 export { AppText } from './app-text';
 export { Button } from './button';
 export { Card } from './card';
+export { Chip, ChipRow } from './chip';
+export { Confetti } from './confetti';
+export { EmptyState } from './empty-state';
 export { IconBadge } from './icon-badge';
 export { ListGroup, ListRow } from './list';
 export { PressableScale } from './pressable-scale';
+export { ProgressBar, ProgressRing } from './progress';
 export { Appear, Screen } from './screen';
+export { SectionHeader } from './section-header';
 export { SegmentedControl } from './segmented-control';
+export { TextField } from './text-field';

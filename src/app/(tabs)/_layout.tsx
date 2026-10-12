@@ -17,6 +17,11 @@ export default function TabsLayout() {
         <NativeTabs.Trigger.Icon sf={{ default: 'sun.max', selected: 'sun.max.fill' }} md="wb_sunny" />
       </NativeTabs.Trigger>
 
+      <NativeTabs.Trigger name="bible">
+        <NativeTabs.Trigger.Label>Bible</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf={{ default: 'book', selected: 'book.fill' }} md="menu_book" />
+      </NativeTabs.Trigger>
+
       <NativeTabs.Trigger name="prayer">
         <NativeTabs.Trigger.Label>Prayer</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
@@ -25,20 +30,15 @@ export default function TabsLayout() {
         />
       </NativeTabs.Trigger>
 
-      <NativeTabs.Trigger name="study">
-        <NativeTabs.Trigger.Label>Study</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon sf={{ default: 'book', selected: 'book.fill' }} md="menu_book" />
-      </NativeTabs.Trigger>
-
-      <NativeTabs.Trigger name="memorize">
-        <NativeTabs.Trigger.Label>Memorize</NativeTabs.Trigger.Label>
+      <NativeTabs.Trigger name="grow">
+        <NativeTabs.Trigger.Label>Grow</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
-          sf={{ default: 'heart.text.square', selected: 'heart.text.square.fill' }}
-          md="favorite"
+          sf={{ default: 'leaf', selected: 'leaf.fill' }}
+          md="eco"
         />
       </NativeTabs.Trigger>
 
-      <NativeTabs.Trigger name="settings">
+      <NativeTabs.Trigger name="profile">
         <NativeTabs.Trigger.Label>Profile</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
           sf={{ default: 'person.crop.circle', selected: 'person.crop.circle.fill' }}

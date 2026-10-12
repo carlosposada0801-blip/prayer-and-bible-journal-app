@@ -6,7 +6,37 @@
  * stay in sync automatically. Add new colors to BOTH palettes.
  */
 
-export const palette = {
+type Gradient = readonly [string, string];
+
+export type ThemeColors = {
+  background: string;
+  surface: string;
+  surfaceMuted: string;
+  surfaceRaised: string;
+  text: string;
+  textSecondary: string;
+  textTertiary: string;
+  textOnDark: string;
+  primary: string;
+  onPrimary: string;
+  gold: string;
+  goldSoft: string;
+  sage: string;
+  sageSoft: string;
+  rose: string;
+  roseSoft: string;
+  sky: string;
+  skySoft: string;
+  separator: string;
+  border: string;
+  gradientVerse: Gradient;
+  gradientDawn: Gradient;
+  gradientSage: Gradient;
+};
+
+export type ColorScheme = 'light' | 'dark';
+
+export const palette: Record<ColorScheme, ThemeColors> = {
   light: {
     // Surfaces
     background: '#FAF7F0', // soft cream page background
@@ -37,9 +67,9 @@ export const palette = {
     border: 'rgba(28, 35, 51, 0.06)',
 
     // Feature gradients (top-left → bottom-right)
-    gradientVerse: ['#2B3B5E', '#1C2742'] as const,
-    gradientDawn: ['#FFF7E6', '#F7E6C4'] as const,
-    gradientSage: ['#EEF3EA', '#DCE7D8'] as const,
+    gradientVerse: ['#2B3B5E', '#1C2742'],
+    gradientDawn: ['#FFF7E6', '#F7E6C4'],
+    gradientSage: ['#EEF3EA', '#DCE7D8'],
   },
   dark: {
     background: '#0E131D',
@@ -66,11 +96,8 @@ export const palette = {
     separator: 'rgba(243, 238, 227, 0.08)',
     border: 'rgba(243, 238, 227, 0.07)',
 
-    gradientVerse: ['#232E4A', '#121827'] as const,
-    gradientDawn: ['#2A2516', '#1B1910'] as const,
-    gradientSage: ['#1B241E', '#141B16'] as const,
+    gradientVerse: ['#232E4A', '#121827'],
+    gradientDawn: ['#2A2516', '#1B1910'],
+    gradientSage: ['#1B241E', '#141B16'],
   },
 };
-
-export type ColorScheme = keyof typeof palette;
-export type ThemeColors = (typeof palette)['light'];
