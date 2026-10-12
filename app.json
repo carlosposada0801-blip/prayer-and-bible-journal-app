@@ -38,7 +38,13 @@
           }
         }
       ],
-      "expo-sqlite"
+      "expo-sqlite",
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Abide uses Face ID to keep your prayer journal private."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

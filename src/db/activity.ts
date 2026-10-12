@@ -12,16 +12,20 @@ export function logActivity(kind: ActivityKind, date = toDateKey()) {
   run('activity', 'INSERT OR IGNORE INTO activity (date, kind) VALUES (?, ?)', date, kind);
 }
 
-function activeDays(): Set<string> {
-  return new Set(all<{ date: string }>('SELECT DISTINCT date FROM activity').map((r) => r.date));
+function activeDays(kind?: ActivityKind): Set<string> {
+  const rows = kind
+    ? all<{ date: string }>('SELECT date FROM activity WHERE kind = ?', kind)
+    : all<{ date: string }>('SELECT DISTINCT date FROM activity');
+  return new Set(rows.map((r) => r.date));
 }
 
 /**
  * Current streak: consecutive days with activity, ending today – or
  * yesterday, so the streak never "breaks" before you've had a chance today.
+ * Pass a kind (e.g. 'prayer') for a streak of just that activity.
  */
-export function currentStreak(): number {
-  const days = activeDays();
+export function currentStreak(kind?: ActivityKind): number {
+  const days = activeDays(kind);
   let cursor = new Date();
   if (!days.has(toDateKey(cursor))) cursor = addDays(cursor, -1);
   let streak = 0;

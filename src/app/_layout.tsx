@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
+import { AchievementToast } from '@/components/achievement-toast';
 import { prepareDatabase } from '@/db/database';
 import { warmUp } from '@/lib/bible/engine';
 import { getPreferences } from '@/store/preferences';
@@ -48,6 +49,10 @@ export default function RootLayout() {
     contentStyle: { backgroundColor: colors.background },
   };
   const fullSheet = { ...sheet, sheetAllowedDetents: [1] };
+  // Card-style modal for writing (swipe down to dismiss).
+  const modal = { presentation: 'modal' as const, contentStyle: { backgroundColor: colors.background } };
+  // Immersive full-screen experiences (no tab bar).
+  const immersive = { presentation: 'fullScreenModal' as const, animation: 'fade' as const };
 
   return (
     <GestureHandlerRootView style={{ flex: 1, backgroundColor: colors.background }}>
@@ -61,8 +66,13 @@ export default function RootLayout() {
           <Stack.Screen name="reader-settings" options={sheet} />
           <Stack.Screen name="verse-note" options={fullSheet} />
           <Stack.Screen name="cross-references" options={sheet} />
+          <Stack.Screen name="prayer-editor" options={modal} />
+          <Stack.Screen name="prayer-answer" options={fullSheet} />
+          <Stack.Screen name="person-editor" options={sheet} />
+          <Stack.Screen name="guided-prayer" options={immersive} />
         </Stack>
         )}
+        {ready && <AchievementToast />}
       </ThemeProvider>
     </GestureHandlerRootView>
   );
