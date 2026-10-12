@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppText, Confetti, IconBadge } from '@/components/ui';
 import { dismissAchievement, useAchievementQueue } from '@/db/achievements';
+import { useIsQuiet } from '@/lib/focus';
 import { haptics } from '@/lib/haptics';
 import { useTheme } from '@/theme/use-theme';
 import { radius, space } from '@/theme/tokens';
@@ -13,7 +14,9 @@ import { radius, space } from '@/theme/tokens';
 /** Celebrates newly unlocked badges with a banner and a burst of confetti. */
 export function AchievementToast() {
   const queue = useAchievementQueue();
-  const current = queue[0];
+  const quiet = useIsQuiet();
+  // Celebrations wait until a quiet focus session (prayer, study, reading) ends.
+  const current = quiet ? undefined : queue[0];
   const insets = useSafeAreaInsets();
   const { colors, shadow, isDark } = useTheme();
   const [burst, setBurst] = useState(0);

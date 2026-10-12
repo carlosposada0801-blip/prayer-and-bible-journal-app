@@ -10,6 +10,7 @@ import { useLive } from '@/db/live';
 import { getPlanState, setDayComplete } from '@/db/plans';
 import { usePassage } from '@/lib/bible/hooks';
 import { openReader } from '@/lib/bible/navigation';
+import { useFocusSession } from '@/lib/focus';
 import { haptics } from '@/lib/haptics';
 import { usePreferences } from '@/store/preferences';
 import { useTheme } from '@/theme/use-theme';
@@ -22,6 +23,7 @@ export default function PlanDay() {
   const state = useLive(() => getPlanState(params.plan), ['plans', 'plan_days'], [params.plan]);
   const { colors } = useTheme();
   const [burst, setBurst] = useState(0);
+  useFocusSession();
   if (!state) return null;
 
   const readings = state.plan.schedule(state.options.pace)[day - 1] ?? [];

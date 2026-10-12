@@ -1,12 +1,15 @@
-import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
+import * as Notifications from 'expo-notifications';
+import { DarkTheme, DefaultTheme, router, Stack, ThemeProvider } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
-import { Platform } from 'react-native';
+import { AppState, Platform } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { AchievementToast } from '@/components/achievement-toast';
+import { checkAchievements } from '@/db/achievements';
 import { prepareDatabase } from '@/db/database';
 import { warmUp } from '@/lib/bible/engine';
+import { rescheduleReminders, routeForReminder } from '@/lib/notifications';
 import { getPreferences } from '@/store/preferences';
 import { useTheme } from '@/theme/use-theme';
 
@@ -27,6 +30,29 @@ export default function RootLayout() {
       .then(() => warmUp(getPreferences().translation))
       .finally(() => setReady(true));
   }, [ready]);
+
+  // Keep reminders fresh, catch streak badges, and open the right screen
+  // when a reminder is tapped.
+  useEffect(() => {
+    if (!ready || Platform.OS === 'web') return;
+    rescheduleReminders();
+    checkAchievements();
+    const appState = AppState.addEventListener('change', (s) => {
+      if (s === 'active') {
+        rescheduleReminders();
+        checkAchievements();
+      }
+    });
+    const tapped = Notifications.addNotificationResponseReceivedListener((response) => {
+      const kind = response.notification.request.content.data?.kind as Parameters<typeof routeForReminder>[0];
+      router.navigate(routeForReminder(kind) as never);
+    });
+    return () => {
+      appState.remove();
+      tapped.remove();
+    };
+  }, [ready]);
+
   const base = isDark ? DarkTheme : DefaultTheme;
   const navigationTheme = {
     ...base,

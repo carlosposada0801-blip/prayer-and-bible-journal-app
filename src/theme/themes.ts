@@ -26,7 +26,7 @@ export const THEMES: AppTheme[] = [
   {
     id: 'still-waters',
     name: 'Still Waters',
-    description: 'He leads me beside still waters.',
+    description: 'Calm blues, like a quiet stream at dawn.',
     unlockedBy: 'streak-3',
     light: { gold: '#3E7FA8', goldSoft: '#DDEBF4', primary: '#1F4E6B', gradientVerse: ['#2C6A8C', '#173E57'] },
     dark: { gold: '#7DB8DC', goldSoft: 'rgba(125, 184, 220, 0.15)', primary: '#7DB8DC', onPrimary: '#0B1A24', gradientVerse: ['#1D3F55', '#0F2231'] },

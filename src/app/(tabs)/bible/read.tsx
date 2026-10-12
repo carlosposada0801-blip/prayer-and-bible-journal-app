@@ -25,6 +25,7 @@ import { audio, useAudio } from '@/lib/bible/audio';
 import { getChapter, getChapterTitle } from '@/lib/bible/engine';
 import { useAsync, useChapter } from '@/lib/bible/hooks';
 import { takePendingVerse } from '@/lib/bible/navigation';
+import { useFocusSession } from '@/lib/focus';
 import { haptics } from '@/lib/haptics';
 import { setPreference, usePreferences } from '@/store/preferences';
 import { useTheme } from '@/theme/use-theme';
@@ -36,6 +37,7 @@ export default function ReaderScreen() {
   const { colors } = useTheme();
   const { book, chapter } = prefs.lastRead;
   const audioState = useAudio();
+  useFocusSession();
 
   // Deep links like /bible/read?book=43&chapter=3 set the position once.
   useEffect(() => {

@@ -44,6 +44,12 @@
         {
           "faceIDPermission": "Abide uses Face ID to keep your prayer journal private."
         }
+      ],
+      [
+        "expo-notifications",
+        {
+          "color": "#C49A3C"
+        }
       ]
     ],
     "experiments": {

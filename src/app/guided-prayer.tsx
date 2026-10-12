@@ -20,6 +20,7 @@ import { ScriptureQuote } from '@/components/scripture-quote';
 import { AppText, Button, Confetti } from '@/components/ui';
 import { checkAchievements } from '@/db/achievements';
 import { saveGuidedSession } from '@/db/gratitude';
+import { useFocusSession } from '@/lib/focus';
 import { haptics } from '@/lib/haptics';
 import { useTheme } from '@/theme/use-theme';
 import { radius, space } from '@/theme/tokens';
@@ -87,6 +88,7 @@ export default function GuidedPrayer() {
   const [remaining, setRemaining] = useState(0);
   const [burst, setBurst] = useState(0);
   const startedAt = useRef(Date.now());
+  useFocusSession();
 
   const step = STEPS[stepIndex];
   const done = stepIndex >= STEPS.length;

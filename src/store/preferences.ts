@@ -19,6 +19,7 @@ export type ReminderKind = 'study' | 'prayer' | 'practice' | 'person' | 'plan';
 export type Reminder = { enabled: boolean; hour: number; minute: number };
 
 export type Preferences = {
+  name: string;
   appearance: AppearanceMode;
   textSize: TextSize;
   haptics: boolean;
@@ -46,6 +47,7 @@ export const textScaleFor: Record<TextSize, number> = {
 const STORAGE_KEY = 'preferences.v1';
 
 const defaults: Preferences = {
+  name: '',
   appearance: 'system',
   textSize: 'default',
   haptics: true,

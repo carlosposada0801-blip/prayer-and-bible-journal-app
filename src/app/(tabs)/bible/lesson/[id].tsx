@@ -12,6 +12,7 @@ import { useLive } from '@/db/live';
 import { completeLesson, lessonProgress, saveAnswer } from '@/db/study';
 import { usePassage } from '@/lib/bible/hooks';
 import { openReader } from '@/lib/bible/navigation';
+import { useFocusSession } from '@/lib/focus';
 import { haptics } from '@/lib/haptics';
 import { usePreferences } from '@/store/preferences';
 import { useTheme } from '@/theme/use-theme';
@@ -28,6 +29,7 @@ export default function LessonScreen() {
   const passageRef = found ? ref(found.lesson.passage) : undefined;
   const { data: verses, loading } = usePassage(passageRef);
   const [burst, setBurst] = useState(0);
+  useFocusSession();
 
   if (!found || !found.lesson.explanation) {
     return (
