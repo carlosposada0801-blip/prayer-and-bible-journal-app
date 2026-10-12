@@ -10,6 +10,7 @@ import { checkAchievements } from '@/db/achievements';
 import { prepareDatabase } from '@/db/database';
 import { warmUp } from '@/lib/bible/engine';
 import { rescheduleReminders, routeForReminder } from '@/lib/notifications';
+import { updateWidgets } from '@/lib/widgets';
 import { getPreferences } from '@/store/preferences';
 import { useTheme } from '@/theme/use-theme';
 
@@ -37,11 +38,14 @@ export default function RootLayout() {
     if (!ready || Platform.OS === 'web') return;
     rescheduleReminders();
     checkAchievements();
+    updateWidgets();
     const appState = AppState.addEventListener('change', (s) => {
       if (s === 'active') {
         rescheduleReminders();
         checkAchievements();
       }
+      // Refresh widgets with today's progress as you leave the app.
+      if (s === 'active' || s === 'background') updateWidgets();
     });
     const tapped = Notifications.addNotificationResponseReceivedListener((response) => {
       const kind = response.notification.request.content.data?.kind as Parameters<typeof routeForReminder>[0];
@@ -99,6 +103,7 @@ export default function RootLayout() {
           <Stack.Screen name="practice" options={{ ...immersive, gestureEnabled: false }} />
           <Stack.Screen name="trivia-play" options={{ ...immersive, gestureEnabled: false }} />
           <Stack.Screen name="fast-new" options={fullSheet} />
+          <Stack.Screen name="votd" options={modal} />
           <Stack.Screen name="verse-level" options={{ ...sheet, sheetAllowedDetents: [0.55, 1] }} />
         </Stack>
         )}

@@ -50,6 +50,39 @@
         {
           "color": "#C49A3C"
         }
+      ],
+      [
+        "expo-widgets",
+        {
+          "widgets": [
+            {
+              "name": "VerseOfTheDay",
+              "displayName": "Verse of the Day",
+              "description": "A new verse each day in your chosen translation.",
+              "ios": {
+                "supportedFamilies": [
+                  "systemSmall",
+                  "systemMedium",
+                  "systemLarge",
+                  "accessoryRectangular",
+                  "accessoryInline"
+                ]
+              }
+            },
+            {
+              "name": "Streak",
+              "displayName": "Daily Rhythm",
+              "description": "Your gentle streak of time with God.",
+              "ios": {
+                "supportedFamilies": [
+                  "systemSmall",
+                  "accessoryCircular",
+                  "accessoryInline"
+                ]
+              }
+            }
+          ]
+        }
       ]
     ],
     "experiments": {

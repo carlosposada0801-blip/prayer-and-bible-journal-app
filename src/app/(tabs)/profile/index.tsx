@@ -130,6 +130,7 @@ export default function ProfileScreen() {
             trailing={`${Object.values(prefs.reminders).filter((r) => r.enabled).length} on`}
             onPress={() => router.push('/profile/reminders')}
           />
+          <ListRow icon="sparkle" tone="rose" title="Siri & Shortcuts" onPress={() => router.push('/profile/siri')} />
           <ListRow icon="openBook" tone="navy" title="Bible Translation" trailing={prefs.translation} onPress={() => router.push('/translation-picker')} />
         </ListGroup>
       </Appear>
