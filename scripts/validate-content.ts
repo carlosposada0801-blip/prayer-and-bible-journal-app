@@ -10,6 +10,9 @@ import { chapterCount, parseReference, verseCount } from '../src/data/bible/refe
 import { CHARACTER_PLANS, SEASONAL_PLANS, TOPICAL_PLANS } from '../src/data/plans/curated';
 import { PLANS, getChronologicalChapters } from '../src/data/plans';
 import { STUDY_SERIES, isPublished } from '../src/data/studies';
+import { TRIVIA } from '../src/data/trivia';
+import { COURSE_VERSES } from '../src/data/memorize';
+import { CHARACTERS } from '../src/data/characters';
 import { VERSES_OF_THE_DAY } from '../src/data/verses-of-the-day';
 
 const errors: string[] = [];
@@ -63,6 +66,20 @@ for (const plan of PLANS) {
   if (seen.size !== expected || [...seen.values()].some((n) => n !== 1)) {
     errors.push(`chronological plan covers ${seen.size} unique chapters (expected ${expected}) with ${[...seen.values()].filter((n) => n > 1).length} duplicates`);
   }
+}
+
+// Trivia and memorization courses.
+const triviaIds = new Set<string>();
+for (const q of TRIVIA) {
+  if (triviaIds.has(q.id)) errors.push(`trivia: duplicate id ${q.id}`);
+  triviaIds.add(q.id);
+  check(`trivia ${q.id}`, q.reference);
+  if (new Set(q.options.map((o) => o.toLowerCase())).size !== 4) errors.push(`trivia ${q.id}: options must be 4 different answers`);
+}
+COURSE_VERSES.forEach((v) => check('memorize course', v));
+for (const c of CHARACTERS) {
+  c.keyVerses.forEach((v) => check(`character ${c.id}`, v));
+  if (!PLANS.some((p) => p.id === c.planId)) errors.push(`character ${c.id}: plan "${c.planId}" not found`);
 }
 
 export { check };
