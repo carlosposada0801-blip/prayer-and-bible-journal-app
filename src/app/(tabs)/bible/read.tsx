@@ -219,6 +219,9 @@ export default function ReaderScreen() {
                   {error.message}
                 </AppText>
                 <Button title="Use BSB instead" variant="secondary" onPress={() => setPreference('translation', 'BSB')} />
+                <AppText variant="footnote" color="textTertiary" align="center" style={{ paddingHorizontal: space.lg }}>
+                  Chapters you’ve already opened in this translation still work offline.
+                </AppText>
               </View>
             ) : (
               verses && (
@@ -235,6 +238,11 @@ export default function ReaderScreen() {
               )
             )}
 
+            {verses && translationInfo(prefs.translation).copyright && (
+              <AppText variant="caption" color="textTertiary" align="center" style={{ marginTop: space.xl, paddingHorizontal: space.lg }}>
+                {translationInfo(prefs.translation).copyright}
+              </AppText>
+            )}
             {verses && (
               <View style={{ marginTop: space.xxl, gap: space.lg, alignItems: 'center' }}>
                 <Button

@@ -10,7 +10,7 @@ import {
 } from '@/data/bible/translations';
 import type { Reference } from '@/data/bible/references';
 
-import { fetchApiChapter } from './api-bible';
+import { getLicensedChapter } from './licensed';
 import { openAssetDatabase } from './open-asset';
 import type { SearchResult, Verse } from './types';
 
@@ -57,7 +57,7 @@ export async function getChapter(id: TranslationId, book: number, chapter: numbe
       [book, chapter],
     );
   } else {
-    verses = await fetchApiChapter(id, book, chapter);
+    verses = (await getLicensedChapter(id, book, chapter)).verses;
   }
   if (chapterCache.size > 60) chapterCache.delete(chapterCache.keys().next().value!);
   chapterCache.set(key, verses);
@@ -66,7 +66,8 @@ export async function getChapter(id: TranslationId, book: number, chapter: numbe
 
 /** A psalm's superscription (e.g. "A Psalm of David."), if the translation has one. */
 export async function getChapterTitle(id: TranslationId, book: number, chapter: number): Promise<string | null> {
-  if (book !== 19 || !isBundled(id)) return null;
+  if (book !== 19) return null;
+  if (!isBundled(id)) return (await getLicensedChapter(id, book, chapter)).title;
   const database = await translationDb(id);
   const row = await database.getFirstAsync<{ title: string }>('SELECT title FROM titles WHERE book = ? AND chapter = ?', [book, chapter]);
   return row?.title ?? null;
@@ -91,6 +92,16 @@ export async function getPassage(id: TranslationId, r: Reference) {
 export async function getPassageText(id: TranslationId, r: Reference) {
   const verses = await getPassage(id, r);
   return verses.map((v) => v.text).join(' ');
+}
+
+/** Like getPassageText, but falls back to the BSB if a licensed translation can't load (e.g. offline). */
+export async function getPassageTextSafe(id: TranslationId, r: Reference) {
+  try {
+    return await getPassageText(id, r);
+  } catch (e) {
+    if (isBundled(id)) throw e;
+    return getPassageText('BSB', r);
+  }
 }
 
 /**

@@ -9,7 +9,7 @@ Built with React Native + Expo (SDK 57) and Expo Router. Everything is stored on
 | Tab | Features |
 | --- | --- |
 | **Today** | Greeting, verse of the day (listen, share, open in the Bible), today's plan reading and lesson, a gentle streak, quick links |
-| **Bible** | **Read:** six public-domain translations (BSB, WEB, KJV, ASV, YLT, Darby), quick switcher, side-by-side compare, highlights, notes, bookmarks, cross-references, read-aloud with speed and auto-continue, search. **Plans:** about 135 reading plans (chronological, whole Bible, each book, topical, seasonal, character plans), catch-up tools, reminders, and a custom plan builder. **Studies:** daily lesson series with questions, application, and prayer |
+| **Bible** | **Read:** six offline translations (BSB, WEB, KJV, ASV, YLT, Darby) plus NIV, ESV, NLT, NKJV, CSB and NASB with free keys, quick switcher, side-by-side compare, highlights, notes, bookmarks, cross-references, read-aloud with speed and auto-continue, search. **Plans:** about 135 reading plans (chronological, whole Bible, each book, topical, seasonal, character plans), catch-up tools, reminders, and a custom plan builder. **Studies:** daily lesson series with questions, application, and prayer |
 | **Prayer** | Journal with tags, answered prayers and a timeline, search and filters, Face ID lock, PDF export. Guided ACTS prayer with a timer. A prayer list for people with a daily "pray for" reminder. A gratitude log. A fasting tracker with a live timer, reflections, and history |
 | **Grow** | **Memorize:** a Duolingo-style path with Grace the lamb, five quiz types, hearts, XP, spaced review, and My Verses. **Trivia:** Easy/Medium/Hard by book and topic, with explanations. **People:** 18 Bible character profiles linked to plans |
 | **Profile** | Stats, 27 badges, unlockable themes, separate reminder times, translation, text size, appearance, haptics, Quiet Mode, Siri & Shortcuts |
@@ -70,7 +70,7 @@ npm run typecheck
 
 The six bundled translations are public domain (the BSB was dedicated to the public domain in 2023). To rebuild them: `npm run build:bible` (needs Python 3 and internet).
 
-NIV, ESV, NLT, NKJV, CSB, and NASB are copyrighted. Abide can show them through API.Bible if you add a key in `.env` (copy `.env.example`), but publishing an app with them requires each publisher's license. See [docs/LICENSED_TRANSLATIONS.md](docs/LICENSED_TRANSLATIONS.md).
+NIV, ESV, NLT, NKJV, CSB, and NASB also work: add your free personal keys to `.env` (copy `.env.example`). Chapters you open are saved on your phone for offline reading. Steps are in [docs/LICENSED_TRANSLATIONS.md](docs/LICENSED_TRANSLATIONS.md).
 
 ## Later (planned, not built)
 

@@ -34,7 +34,7 @@ import {
   totalXp,
   xpToday,
 } from '@/db/memorize';
-import { getPassageText } from '@/lib/bible/engine';
+import { getPassageTextSafe } from '@/lib/bible/engine';
 import { useAsync } from '@/lib/bible/hooks';
 import { haptics } from '@/lib/haptics';
 import { lessonQuestions, reviewQuestions, type Question } from '@/lib/memorize/quiz';
@@ -56,14 +56,14 @@ export default function Practice() {
     const pool = [...new Set([...COURSE_VERSES, ...allMemoryVerses().map((v) => v.reference)])];
     if (mode === 'lesson' && params.ref) {
       const stage = getMemoryVerse(params.ref)?.stage ?? 0;
-      const text = await getPassageText(prefs.translation, parseReference(params.ref)!);
+      const text = await getPassageTextSafe(prefs.translation, parseReference(params.ref)!);
       return { questions: lessonQuestions(params.ref, text, stage, pool), references: [params.ref], stages: { [params.ref]: stage } };
     }
     let due = dueVerses(5);
     if (due.length === 0) due = allMemoryVerses().filter((v) => v.stage > 0).sort((a, b) => (a.last_reviewed_at ?? '').localeCompare(b.last_reviewed_at ?? '')).slice(0, 3);
     const questions: Question[] = [];
     for (const v of due) {
-      const text = await getPassageText(prefs.translation, parseReference(v.reference)!);
+      const text = await getPassageTextSafe(prefs.translation, parseReference(v.reference)!);
       questions.push(...reviewQuestions(v.reference, text, v.stage, pool));
     }
     return { questions, references: due.map((v) => v.reference), stages: Object.fromEntries(due.map((v) => [v.reference, v.stage])) };

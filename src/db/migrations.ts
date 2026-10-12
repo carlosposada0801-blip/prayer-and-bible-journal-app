@@ -157,4 +157,16 @@ export const migrations: string[] = [
     unlocked_at TEXT NOT NULL
   );
   `,
+  // v2 – licensed translation chapters saved for offline reading
+  `
+  CREATE TABLE IF NOT EXISTS licensed_chapters (
+    translation TEXT NOT NULL,
+    book INTEGER NOT NULL,
+    chapter INTEGER NOT NULL,
+    verses TEXT NOT NULL,
+    title TEXT,
+    fetched_at TEXT NOT NULL,
+    PRIMARY KEY (translation, book, chapter)
+  );
+  `,
 ];

@@ -5,7 +5,7 @@ import { Pressable, ScrollView, View } from 'react-native';
 import { Icon } from '@/components/icons/icon';
 import { AppText } from '@/components/ui';
 import { API_TRANSLATIONS, BUNDLED_TRANSLATIONS, type Translation, type TranslationId } from '@/data/bible/translations';
-import { apiBibleConfigured, availableApiBibles } from '@/lib/bible/api-bible';
+import { availableLicensed } from '@/lib/bible/licensed';
 import { haptics } from '@/lib/haptics';
 import { setPreference, usePreferences } from '@/store/preferences';
 import { useTheme } from '@/theme/use-theme';
@@ -20,8 +20,8 @@ export default function TranslationPicker() {
   const [apiAvailable, setApiAvailable] = useState<TranslationId[]>([]);
 
   useEffect(() => {
-    availableApiBibles()
-      .then((map) => setApiAvailable(Object.keys(map) as TranslationId[]))
+    availableLicensed()
+      .then(setApiAvailable)
       .catch(() => setApiAvailable([]));
   }, []);
 
@@ -73,15 +73,14 @@ export default function TranslationPicker() {
       </View>
 
       <AppText variant="overline" color="textTertiary">
-        Licensed · via API.Bible
+        More translations · saved as you read
       </AppText>
       <View style={{ backgroundColor: colors.surface, borderRadius: radius.lg, borderCurve: 'continuous', overflow: 'hidden' }}>
         {API_TRANSLATIONS.map((t, i) => row(t, i, apiAvailable.includes(t.id)))}
       </View>
       <AppText variant="footnote" color="textTertiary">
-        {apiBibleConfigured
-          ? 'Translations your API.Bible key can access are enabled. Licensed translations need internet and publisher permission before publishing.'
-          : 'To use NIV, ESV, NLT and others, add an API.Bible key (see docs/LICENSED_TRANSLATIONS.md). These are copyrighted and need permission before publishing.'}
+        Chapters you open are saved on your phone, so they work offline afterward. Greyed-out translations need a free key. See
+        docs/LICENSED_TRANSLATIONS.md.
       </AppText>
     </ScrollView>
   );

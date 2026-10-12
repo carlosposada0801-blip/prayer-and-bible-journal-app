@@ -1,56 +1,32 @@
-# Licensed Bible translations (NIV, ESV, NLT, NKJV, CSB, NASB)
+# More translations: NIV, ESV, NLT, NKJV, CSB, NASB
 
-Abide includes six **public-domain** translations that work offline and can
-be published freely: BSB, WEB, KJV, ASV, YLT and Darby.
+Abide includes six public-domain translations that work offline: BSB, WEB, KJV, ASV, YLT and Darby.
 
-Popular modern translations like the NIV and ESV are **copyrighted**. The app
-can show them through [API.Bible](https://scripture.api.bible) (run by the
-American Bible Society), but only with a key, and publishing an app that
-shows them needs permission from each publisher.
+The popular modern translations are copyrighted, so they aren't stored in this project. Abide loads them from each publisher's official source, using free keys that you get for personal use. After you open a chapter, Abide saves it on your phone, so it loads instantly and works offline from then on.
 
-## Turning it on (for personal testing)
+| Translation | Source | Key in `.env` |
+| --- | --- | --- |
+| **ESV** | Crossway's ESV API | `EXPO_PUBLIC_ESV_API_KEY` |
+| **NLT** | Tyndale's NLT API | `EXPO_PUBLIC_NLT_API_KEY` (works lightly without one) |
+| **NIV, NKJV, CSB, NASB** | API.Bible (American Bible Society) | `EXPO_PUBLIC_API_BIBLE_KEY` |
 
-1. Create a free account at <https://scripture.api.bible> and register an app
-   to get an **API key**.
-2. In the project folder, copy `.env.example` to a new file named `.env` and
-   paste your key:
-   ```
-   EXPO_PUBLIC_API_BIBLE_KEY=your-key-here
-   ```
-3. Stop and restart `npx expo start`.
-4. In the reader, tap the translation button (e.g. **BSB**). Translations your
-   key can access become selectable. The ones it can't access stay greyed out.
+## Setup (about 10 minutes)
 
-Notes:
-- Licensed text needs an internet connection and is not stored offline.
-- Search, verse of the day and quizzes use the bundled translations.
-- Variables starting with `EXPO_PUBLIC_` are built into the app. Before you
-  publish, move API calls to your own small server so your key stays private.
+1. In the project folder, copy `.env.example` to a new file named `.env`.
+2. **ESV:** sign up at <https://api.esv.org>, create an application (choose non-commercial / personal), and copy its token into `EXPO_PUBLIC_ESV_API_KEY`.
+3. **NLT:** request a free key at <https://api.nlt.to> and put it in `EXPO_PUBLIC_NLT_API_KEY`. Without a key, Abide uses Tyndale's public test key, which is fine for light reading.
+4. **NIV, NKJV, CSB, NASB:** create a free account at <https://scripture.api.bible>, add an app, and copy the key into `EXPO_PUBLIC_API_BIBLE_KEY`.
+5. Stop and restart `npx expo start` so the keys are picked up.
+6. In the reader, tap the translation button (e.g. **BSB**). Translations with a working key are selectable; the rest stay greyed out.
 
-## What each translation needs before you publish
+`.env` is in `.gitignore`, so your keys never get pushed to GitHub.
 
-Which translations API.Bible offers changes over time, and each publisher sets
-its own terms. **Always confirm the current terms with the publisher before
-you release.** In general:
+### If one stays greyed out
 
-| Translation | Publisher / rights holder | What to expect |
-|---|---|---|
-| **NIV** | Biblica (with Zondervan/HarperCollins in North America) | Written permission is needed for app use. Biblica controls digital licensing, and API.Bible access to the NIV is limited. |
-| **ESV** | Crossway | Crossway runs its own ESV API (api.esv.org) with free non-commercial use under quotation limits. A commercial or published app needs a license from Crossway. |
-| **NLT** | Tyndale House | Tyndale grants app permissions on request (they also offer an NLT API). You must show the copyright notice. |
-| **NKJV** | Thomas Nelson (HarperCollins Christian Publishing) | Written permission from HarperCollins is needed for app use. |
-| **CSB** | Holman Bible Publishers (Lifeway) | Holman has fairly generous quotation rules but asks that apps request permission. Show the copyright notice. |
-| **NASB** | The Lockman Foundation | Lockman requires permission for electronic and app use. Show the copyright notice. |
+API.Bible decides which Bibles each key can read, and its free plan doesn't include every translation. The NIV in particular is often missing. To check which of the four your key can read, open the translation picker. To ask for more, see API.Bible's dashboard (some publishers approve access on request).
 
-Common requirements across publishers:
-- **Copyright notice**: show the publisher's exact notice wherever the text
-  appears (API.Bible returns it with each passage).
-- **Quotation limits**: typically no more than a set number of verses at once
-  and never a complete book, unless you have a full license.
-- **No changes**: the text can't be edited.
-- **API.Bible terms**: some publishers require API.Bible's usage reporting
-  (FUMS) and its attribution to be included.
+## Good to know
 
-**Recommended path:** launch with the bundled public-domain translations (the
-BSB reads like a modern translation). After launch, contact the publishers of
-the translations your users ask for most.
+- Search, trivia and the verse widget's fallback use the bundled translations. The verse of the day, Bible studies, cross-references and memory verses use whatever translation you've picked, and fall back to the BSB if you're offline and that passage hasn't been saved yet.
+- Each publisher's copyright notice appears under the chapter. The publishers ask for this.
+- This setup is for your personal copy of the app. If you ever publish Abide for others, you'd need a license from each publisher, and the API keys would need to move to a server (variables starting with `EXPO_PUBLIC_` are built into the app).

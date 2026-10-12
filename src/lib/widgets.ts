@@ -7,7 +7,7 @@ import { currentStreak, didToday, lastSevenDays } from '@/db/activity';
 import { addDays } from '@/lib/dates';
 import { getPreferences } from '@/store/preferences';
 
-import { getPassageText } from './bible/engine';
+import { getPassageTextSafe } from './bible/engine';
 
 /**
  * Keeps the Home Screen / Lock Screen widgets up to date.
@@ -51,7 +51,7 @@ export async function updateWidgets() {
       const date = addDays(new Date(), d);
       if (d > 0) date.setHours(0, 0, 0, 0);
       const ref = verseOfTheDay(date);
-      entries.push({ date, props: { text: await getPassageText(translation, ref), reference: formatReference(ref), translation } });
+      entries.push({ date, props: { text: await getPassageTextSafe(translation, ref), reference: formatReference(ref), translation } });
     }
     w.verse.updateTimeline(entries);
     w.streak.updateSnapshot({ streak: currentStreak(), doneToday: didToday(), week: lastSevenDays().map((d) => d.active) });

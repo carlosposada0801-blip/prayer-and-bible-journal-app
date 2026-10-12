@@ -1,21 +1,14 @@
 import { USFM_CODES } from '@/data/bible/references';
-import type { ApiTranslationId, TranslationId } from '@/data/bible/translations';
+import type { ApiTranslationId } from '@/data/bible/translations';
 
+import { splitNumberedVerses } from './parse';
 import type { Verse } from './types';
 
 /**
- * Optional licensed translations through API.Bible (https://scripture.api.bible).
- *
- * 1. Create a free account and an app at scripture.api.bible to get a key.
- * 2. Put it in a file named `.env` at the project root:
- *      EXPO_PUBLIC_API_BIBLE_KEY=your-key-here
- * 3. Restart `npx expo start`.
- *
- * Only translations your key has access to will appear. Read
- * docs/LICENSED_TRANSLATIONS.md before publishing – most require a license.
- *
- * Note: EXPO_PUBLIC_ variables are embedded in the app, so for a published
- * app route these requests through your own server instead.
+ * NIV, NKJV, CSB and NASB (and ESV/NLT as a fallback) through API.Bible
+ * (https://scripture.api.bible). Needs EXPO_PUBLIC_API_BIBLE_KEY in `.env`.
+ * Only translations your key has access to will appear.
+ * See docs/LICENSED_TRANSLATIONS.md.
  */
 
 const KEY = process.env.EXPO_PUBLIC_API_BIBLE_KEY;
@@ -51,19 +44,13 @@ export function availableApiBibles(): Promise<Partial<Record<ApiTranslationId, s
   return biblesPromise;
 }
 
-export async function fetchApiChapter(id: TranslationId, book: number, chapter: number): Promise<Verse[]> {
+export async function fetchApiBibleChapter(id: ApiTranslationId, book: number, chapter: number): Promise<Verse[]> {
   const bibles = await availableApiBibles();
-  const bibleId = bibles[id as ApiTranslationId];
+  const bibleId = bibles[id];
   if (!bibleId) throw new Error(`${id} is not available with your API.Bible key.`);
   const chapterId = `${USFM_CODES[book - 1]}.${chapter}`;
   const data = await request<{ content: string }>(
     `/bibles/${bibleId}/chapters/${chapterId}?content-type=text&include-notes=false&include-titles=false&include-chapter-numbers=false&include-verse-numbers=true`,
   );
-  // Text comes back like "[1] In the beginning… [2] Now the earth…"
-  const parts = data.content.split(/\[(\d+)\]/);
-  const verses: Verse[] = [];
-  for (let i = 1; i < parts.length; i += 2) {
-    verses.push({ verse: Number(parts[i]), text: parts[i + 1].replace(/\s+/g, ' ').trim() });
-  }
-  return verses;
+  return splitNumberedVerses(data.content).verses;
 }

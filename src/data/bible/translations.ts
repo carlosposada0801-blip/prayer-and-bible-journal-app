@@ -2,8 +2,9 @@
  * Bible translations.
  *
  * "bundled" translations are public domain and ship inside the app, so they
- * work offline. "api" translations are copyrighted and only appear when an
- * API.Bible key is configured (see docs/LICENSED_TRANSLATIONS.md).
+ * work offline. "api" translations are copyrighted; they load from their
+ * official sources with your own keys (src/lib/bible/licensed.ts) and are
+ * saved on the device once read. Personal use only.
  */
 
 export type BundledTranslationId = 'BSB' | 'WEB' | 'KJV' | 'ASV' | 'YLT' | 'DARBY';
@@ -16,6 +17,8 @@ export type Translation = {
   year: string;
   description: string;
   source: 'bundled' | 'api';
+  /** Notice shown under each chapter (required by the publishers). */
+  copyright?: string;
 };
 
 export const BUNDLED_TRANSLATIONS: Translation[] = [
@@ -64,12 +67,54 @@ export const BUNDLED_TRANSLATIONS: Translation[] = [
 ];
 
 export const API_TRANSLATIONS: Translation[] = [
-  { id: 'NIV', name: 'New International Version', year: '2011', description: 'Via API.Bible (license required).', source: 'api' },
-  { id: 'ESV', name: 'English Standard Version', year: '2016', description: 'Via API.Bible (license required).', source: 'api' },
-  { id: 'NLT', name: 'New Living Translation', year: '2015', description: 'Via API.Bible (license required).', source: 'api' },
-  { id: 'NKJV', name: 'New King James Version', year: '1982', description: 'Via API.Bible (license required).', source: 'api' },
-  { id: 'CSB', name: 'Christian Standard Bible', year: '2017', description: 'Via API.Bible (license required).', source: 'api' },
-  { id: 'NASB', name: 'New American Standard Bible', year: '2020', description: 'Via API.Bible (license required).', source: 'api' },
+  {
+    id: 'NIV',
+    name: 'New International Version',
+    year: '2011',
+    description: 'Clear, balanced and widely read.',
+    source: 'api',
+    copyright: 'Scripture quotations taken from The Holy Bible, New International Version® NIV®. Copyright © 1973, 1978, 1984, 2011 by Biblica, Inc.™ Used by permission. All rights reserved worldwide.',
+  },
+  {
+    id: 'ESV',
+    name: 'English Standard Version',
+    year: '2016',
+    description: 'Word-for-word, with a readable, literary style.',
+    source: 'api',
+    copyright: 'Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard Version®), © 2001 by Crossway, a publishing ministry of Good News Publishers. Used by permission. All rights reserved.',
+  },
+  {
+    id: 'NLT',
+    name: 'New Living Translation',
+    year: '2015',
+    description: 'Warm, natural, thought-for-thought English.',
+    source: 'api',
+    copyright: 'Scripture quotations are taken from the Holy Bible, New Living Translation, copyright © 1996, 2004, 2015 by Tyndale House Foundation. Used by permission of Tyndale House Publishers, Carol Stream, Illinois 60188. All rights reserved.',
+  },
+  {
+    id: 'NKJV',
+    name: 'New King James Version',
+    year: '1982',
+    description: 'The KJV’s beauty in modern wording.',
+    source: 'api',
+    copyright: 'Scripture taken from the New King James Version®. Copyright © 1982 by Thomas Nelson. Used by permission. All rights reserved.',
+  },
+  {
+    id: 'CSB',
+    name: 'Christian Standard Bible',
+    year: '2017',
+    description: 'Accurate and readable, a careful balance.',
+    source: 'api',
+    copyright: 'Scripture quotations marked CSB have been taken from the Christian Standard Bible®, Copyright © 2017 by Holman Bible Publishers. Used by permission. Christian Standard Bible® and CSB® are federally registered trademarks of Holman Bible Publishers.',
+  },
+  {
+    id: 'NASB',
+    name: 'New American Standard Bible',
+    year: '2020',
+    description: 'Very literal; a favorite for close study.',
+    source: 'api',
+    copyright: 'Scripture quotations taken from the (NASB®) New American Standard Bible®, Copyright © 1960, 1971, 1977, 1995, 2020 by The Lockman Foundation. Used by permission. All rights reserved. lockman.org',
+  },
 ];
 
 /** Metro bundles these files as assets; they are copied into SQLite on first use. */

@@ -3,7 +3,7 @@ import { ActivityIndicator, ScrollView, View } from 'react-native';
 
 import { AppText, Card, EmptyState } from '@/components/ui';
 import { formatReference, type Reference } from '@/data/bible/references';
-import { getCrossReferences, getPassageText } from '@/lib/bible/engine';
+import { getCrossReferences, getPassageTextSafe } from '@/lib/bible/engine';
 import { useAsync, usePassageText } from '@/lib/bible/hooks';
 import { openReader } from '@/lib/bible/navigation';
 import { usePreferences } from '@/store/preferences';
@@ -23,7 +23,7 @@ export default function CrossReferencesSheet() {
 
   const { data, loading } = useAsync(async () => {
     const refs = await getCrossReferences(book, chapter, verse);
-    return Promise.all(refs.map(async (r) => ({ ref: r, text: await getPassageText(prefs.translation, r) })));
+    return Promise.all(refs.map(async (r) => ({ ref: r, text: await getPassageTextSafe(prefs.translation, r) })));
   }, `${prefs.translation}.${book}.${chapter}.${verse}`);
 
   const open = (r: Reference) => {

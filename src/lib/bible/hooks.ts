@@ -4,7 +4,7 @@ import type { Reference } from '@/data/bible/references';
 import type { TranslationId } from '@/data/bible/translations';
 import { usePreferences } from '@/store/preferences';
 
-import { getChapter, getPassage, getPassageText } from './engine';
+import { getChapter, getPassage, getPassageTextSafe } from './engine';
 import type { Verse } from './types';
 
 type AsyncState<T> = { data: T | undefined; loading: boolean; error: Error | undefined };
@@ -42,7 +42,7 @@ export function usePassageText(reference: Reference | undefined, translation?: T
   const prefs = usePreferences();
   const tid = translation ?? prefs.translation;
   return useAsync<string>(
-    () => (reference ? getPassageText(tid, reference) : Promise.resolve('')),
+    () => (reference ? getPassageTextSafe(tid, reference) : Promise.resolve('')),
     reference ? `${tid}:${refKey(reference)}` : 'none',
   );
 }
@@ -51,7 +51,7 @@ export function usePassage(reference: Reference | undefined, translation?: Trans
   const prefs = usePreferences();
   const tid = translation ?? prefs.translation;
   return useAsync(
-    () => (reference ? getPassage(tid, reference) : Promise.resolve([])),
+    () => (reference ? getPassage(tid, reference).catch(() => getPassage('BSB', reference)) : Promise.resolve([])),
     reference ? `${tid}:${refKey(reference)}` : 'none',
   );
 }
