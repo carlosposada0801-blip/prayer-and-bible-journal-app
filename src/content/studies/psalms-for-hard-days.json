@@ -1,0 +1,18 @@
+{
+  "id": "psalms-for-hard-days",
+  "title": "Psalms for Hard Days",
+  "subtitle": "Honest prayers for heavy seasons",
+  "description": "The Psalms give us words when we have none. Learn to bring grief, fear and weariness to God, and to find hope again.",
+  "icon": "droplet",
+  "tone": "rose",
+  "status": "planned",
+  "lessons": [
+    { "id": "hard-days-1", "title": "How Long, O Lord?", "passage": "Psalm 13" },
+    { "id": "hard-days-2", "title": "The Lord Is My Shepherd", "passage": "Psalm 23" },
+    { "id": "hard-days-3", "title": "Why So Downcast, My Soul?", "passage": "Psalm 42" },
+    { "id": "hard-days-4", "title": "God Is Our Refuge", "passage": "Psalm 46" },
+    { "id": "hard-days-5", "title": "A Clean Heart", "passage": "Psalm 51" },
+    { "id": "hard-days-6", "title": "My Help Comes From the Lord", "passage": "Psalm 121" },
+    { "id": "hard-days-7", "title": "Known and Loved", "passage": "Psalm 139" }
+  ]
+}

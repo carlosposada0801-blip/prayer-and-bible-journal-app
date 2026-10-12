@@ -2,7 +2,7 @@ import { useSyncExternalStore } from 'react';
 
 import { achievementInfo, type Achievement } from '@/data/achievements';
 import { BOOKS } from '@/data/bible/books';
-import { STUDY_SERIES } from '@/data/studies';
+import { isPublished, STUDY_SERIES } from '@/data/studies';
 
 import { currentStreak } from './activity';
 import { all, first, nowISO, run } from './database';
@@ -50,7 +50,7 @@ const rules: Record<string, () => boolean> = {
   'trivia-100': () => count('SELECT COUNT(*) AS n FROM trivia_answers') >= 100,
   'study-first': () => count('SELECT COUNT(*) AS n FROM study_progress WHERE completed_at IS NOT NULL') >= 1,
   'study-series': () =>
-    STUDY_SERIES.some(
+    STUDY_SERIES.filter(isPublished).some(
       (s) =>
         s.lessons.length > 0 &&
         count(

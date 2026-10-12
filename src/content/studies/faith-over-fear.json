@@ -1,0 +1,18 @@
+{
+  "id": "faith-over-fear",
+  "title": "Faith Over Fear",
+  "subtitle": "Trusting God when you’re afraid",
+  "description": "Fear is a normal human feeling, but it doesn’t have to rule us. Walk through stories and promises where God meets His people in their fear.",
+  "icon": "mountain",
+  "tone": "gold",
+  "status": "planned",
+  "lessons": [
+    { "id": "faith-over-fear-1", "title": "Be Strong and Courageous", "passage": "Joshua 1:1-9" },
+    { "id": "faith-over-fear-2", "title": "Jesus Calms the Storm", "passage": "Mark 4:35-41" },
+    { "id": "faith-over-fear-3", "title": "Do Not Fear, I Am With You", "passage": "Isaiah 41:8-13" },
+    { "id": "faith-over-fear-4", "title": "Walking on Water", "passage": "Matthew 14:22-33" },
+    { "id": "faith-over-fear-5", "title": "Do Not Worry", "passage": "Matthew 6:25-34" },
+    { "id": "faith-over-fear-6", "title": "Peace That Guards Your Heart", "passage": "Philippians 4:4-9" },
+    { "id": "faith-over-fear-7", "title": "Nothing Can Separate Us", "passage": "Romans 8:31-39" }
+  ]
+}

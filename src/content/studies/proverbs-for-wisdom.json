@@ -1,0 +1,18 @@
+{
+  "id": "proverbs-for-wisdom",
+  "title": "Proverbs for Wisdom",
+  "subtitle": "Practical wisdom for everyday life",
+  "description": "Proverbs speaks to words, work, money, friendships and choices. Discover what it means to live wisely in the fear of the Lord.",
+  "icon": "lightbulb",
+  "tone": "navy",
+  "status": "planned",
+  "lessons": [
+    { "id": "proverbs-1", "title": "The Beginning of Wisdom", "passage": "Proverbs 1:1-7" },
+    { "id": "proverbs-2", "title": "Trust in the Lord", "passage": "Proverbs 3:1-12" },
+    { "id": "proverbs-3", "title": "Guard Your Heart", "passage": "Proverbs 4:20-27" },
+    { "id": "proverbs-4", "title": "The Power of Words", "passage": "Proverbs 18:2-21" },
+    { "id": "proverbs-5", "title": "Work and Rest", "passage": "Proverbs 6:6-11" },
+    { "id": "proverbs-6", "title": "Friends Who Sharpen", "passage": "Proverbs 27:5-17" },
+    { "id": "proverbs-7", "title": "A Woman of Strength", "passage": "Proverbs 31:10-31" }
+  ]
+}

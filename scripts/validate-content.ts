@@ -3,15 +3,18 @@
  *
  *   npm run validate
  *
- * Fails if a reference can't be parsed or points past the end of a chapter.
+ * Fails if a reference can't be parsed or points past the end of a chapter,
+ * or if lesson ids are duplicated.
  */
 import { chapterCount, parseReference, verseCount } from '../src/data/bible/references';
+import { STUDY_SERIES, isPublished } from '../src/data/studies';
 import { VERSES_OF_THE_DAY } from '../src/data/verses-of-the-day';
 
 const errors: string[] = [];
 let checked = 0;
 
-export function check(label: string, input: string) {
+function check(label: string, input: string | undefined) {
+  if (!input) return;
   checked++;
   const r = parseReference(input);
   if (!r) return errors.push(`${label}: cannot parse "${input}"`);
@@ -23,8 +26,20 @@ export function check(label: string, input: string) {
 
 VERSES_OF_THE_DAY.forEach((v) => check('verse of the day', v));
 
-const extra = globalThis as unknown as { __extraChecks?: (() => void)[] };
-(extra.__extraChecks ?? []).forEach((f) => f());
+const lessonIds = new Set<string>();
+for (const series of STUDY_SERIES) {
+  for (const lesson of series.lessons) {
+    if (lessonIds.has(lesson.id)) errors.push(`study: duplicate lesson id "${lesson.id}"`);
+    lessonIds.add(lesson.id);
+    check(`study ${lesson.id} passage`, lesson.passage);
+    check(`study ${lesson.id} key verse`, lesson.keyVerse);
+    if (isPublished(series) && (!lesson.explanation?.length || !lesson.questions?.length || !lesson.application || !lesson.prayer)) {
+      errors.push(`study ${lesson.id}: published lessons need explanation, questions, application and prayer`);
+    }
+  }
+}
+
+export { check };
 
 if (errors.length) {
   console.error(errors.join('\n'));

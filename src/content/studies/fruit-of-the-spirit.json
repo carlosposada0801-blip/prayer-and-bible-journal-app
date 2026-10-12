@@ -1,0 +1,20 @@
+{
+  "id": "fruit-of-the-spirit",
+  "title": "The Fruit of the Spirit",
+  "subtitle": "Nine marks of a life shaped by God",
+  "description": "Galatians 5 describes the character the Holy Spirit grows in us. Take one quality at a time and ask God to make it real in your life.",
+  "icon": "leaf",
+  "tone": "sage",
+  "status": "planned",
+  "lessons": [
+    { "id": "fruit-1", "title": "Love", "passage": "1 Corinthians 13:1-13" },
+    { "id": "fruit-2", "title": "Joy", "passage": "Philippians 4:4-7" },
+    { "id": "fruit-3", "title": "Peace", "passage": "John 14:25-27" },
+    { "id": "fruit-4", "title": "Patience", "passage": "James 5:7-11" },
+    { "id": "fruit-5", "title": "Kindness", "passage": "Luke 10:25-37" },
+    { "id": "fruit-6", "title": "Goodness", "passage": "Romans 12:9-21" },
+    { "id": "fruit-7", "title": "Faithfulness", "passage": "Lamentations 3:19-26" },
+    { "id": "fruit-8", "title": "Gentleness", "passage": "Matthew 11:28-30" },
+    { "id": "fruit-9", "title": "Self-Control", "passage": "Titus 2:11-14" }
+  ]
+}
