@@ -85,7 +85,7 @@ export const TRANSLATION_ASSETS: Record<BundledTranslationId, number> = {
 export const XREFS_ASSET: number = require('@/assets/bible/xrefs.db');
 
 /** Bump when the bundled .db files are rebuilt so devices re-import them. */
-export const BIBLE_DATA_VERSION = 1;
+export const BIBLE_DATA_VERSION = 2;
 
 export function isBundled(id: TranslationId): id is BundledTranslationId {
   return id in TRANSLATION_ASSETS;

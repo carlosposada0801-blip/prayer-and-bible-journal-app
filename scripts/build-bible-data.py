@@ -110,6 +110,46 @@ SCROLLMAPPER_NAMES = {
 }
 BOOK_INDEX = {b[0]: i + 1 for i, b in enumerate(BOOKS)}
 
+# Psalm superscriptions ("A Psalm of David.") are stored as part of verse 1
+# in most sources. We move them into a separate `titles` table so the reader
+# can show them as a heading and quizzes use only the verse itself.
+TITLE_START = re.compile(
+    r"^(A |An )?(Psalm|Song|Prayer|Maskil|Maschil|Miktam|Michtam|Shiggaion|Contemplation|Instruction|For the |To the |"
+    r"Of David|Of Asaph|Of Solomon|Of the sons|Of Moses|Of Heman|Of Ethan|By |Davidic|Concerning)",
+    re.I,
+)
+TITLE_CONT = re.compile(
+    r"^(--)?\s*(Of |By |According to|Set to|On |Upon |To the tune|To the |A song|A love song|A Psalm|A Maskil|A Maschil|Maskil|"
+    r"Maschil|A Miktam|Miktam|Michtam|For |When |After |To bring|A prayer|Concerning|With stringed|Lest |Do not destroy|"
+    r"Destroy not|An instruction|Instruction|Testimony|A secret|Psalm|Song|Davidic|‘|“|To teach|For teaching)",
+    re.I,
+)
+
+
+def split_psalm_title(text):
+    m = re.match(r"^(.*?: and he said,)\s+(.*)$", text, re.I)
+    if m and TITLE_START.match(m.group(1)):
+        return m.group(1).rstrip(","), m.group(2)
+    parts = [p for p in re.split(r"(?<=[.?!])\s+|(?<=[.?][”’'])\s+|(?<=--)\s*|(?<=—)\s+", text) if p.strip()]
+    if not parts or not TITLE_START.match(parts[0].lstrip("-").strip()):
+        return None, text
+    title = [parts[0]]
+    i = 1
+    # Psalm text never starts with a lowercase letter, so lowercase fragments belong to the title.
+    while i < len(parts) - 1 and (parts[i].strip() in ("--", "—") or TITLE_CONT.match(parts[i].strip()) or parts[i].strip()[:1].islower()):
+        title.append(parts[i])
+        i += 1
+    rest = " ".join(parts[i:]).strip()
+    for lead in ("He said: ", "And he said, ", "and he said, "):
+        if rest.startswith(lead):
+            title.append(lead.strip())
+            rest = rest[len(lead):]
+    if not rest:
+        return None, text
+    clean_title = re.sub(r"\s*--\s*", " ", " ".join(title)).strip(" -—")
+    return clean_title, rest.lstrip("-— ")
+
+
 TRANSLATIONS = ["KJV", "BSB", "ASV", "YLT", "Darby"]
 
 
@@ -134,6 +174,8 @@ def clean(text, tid):
     if tid == "Darby":
         # The source joins some words ("ofGod"); lower→upper never happens inside an English word.
         text = re.sub(r"([a-z])([A-Z])", r"\1 \2", text)
+        # ...and attaches "God" to the previous word or punctuation ("OGod", "Jehovah,God").
+        text = re.sub(r"(?<=[A-Za-z,;:.!?])(?=God\b)", " ", text)
     if tid == "YLT":
         text = text.replace("`", "\u2018")  # YLT marks opening quotes with a backtick
     text = text.replace("*", "")
@@ -178,13 +220,23 @@ def write_translation(tid, rows):
         "CREATE TABLE verses (book INTEGER NOT NULL, chapter INTEGER NOT NULL, verse INTEGER NOT NULL,"
         " text TEXT NOT NULL, PRIMARY KEY (book, chapter, verse)) WITHOUT ROWID"
     )
-    db.executemany("INSERT OR REPLACE INTO verses VALUES (?,?,?,?)", rows)
+    titles = []
+    clean_rows = []
+    for b, c, v, text in rows:
+        if b == 19 and v == 1:
+            title, text = split_psalm_title(text)
+            if title:
+                titles.append((b, c, title))
+        clean_rows.append((b, c, v, text))
+    db.executemany("INSERT OR REPLACE INTO verses VALUES (?,?,?,?)", clean_rows)
+    db.execute("CREATE TABLE titles (book INTEGER NOT NULL, chapter INTEGER NOT NULL, title TEXT NOT NULL, PRIMARY KEY (book, chapter)) WITHOUT ROWID")
+    db.executemany("INSERT INTO titles VALUES (?,?,?)", titles)
     db.execute("CREATE TABLE meta (key TEXT PRIMARY KEY, value TEXT)")
     db.execute("INSERT INTO meta VALUES ('translation', ?)", (tid,))
     db.commit()
     db.execute("VACUUM")
     db.close()
-    print(f"{tid}: {len(rows)} verses, {os.path.getsize(path) // 1024} KB")
+    print(f"{tid}: {len(rows)} verses, {len(titles)} psalm titles, {os.path.getsize(path) // 1024} KB")
 
 
 def write_xrefs():

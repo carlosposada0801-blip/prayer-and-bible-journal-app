@@ -1,19 +1,35 @@
-import { ComingSoon } from '@/components/coming-soon';
+import { useLocalSearchParams } from 'expo-router';
+import { useEffect, useState } from 'react';
 
-export default function MemorizeScreen() {
+import { CharactersHome } from '@/components/characters/characters-home';
+import { MemorizeHome } from '@/components/memorize/memorize-home';
+import { TriviaHome } from '@/components/trivia/trivia-home';
+import { Screen, SegmentedControl } from '@/components/ui';
+
+type Section = 'memorize' | 'trivia' | 'characters';
+
+/** Grow tab: Memorize · Trivia · People of the Bible. */
+export default function GrowScreen() {
+  const params = useLocalSearchParams<{ section?: Section }>();
+  const [section, setSection] = useState<Section>(params.section ?? 'memorize');
+  useEffect(() => {
+    if (params.section) setSection(params.section);
+  }, [params.section]);
+
   return (
-    <ComingSoon
-      icon="heart"
-      tone="rose"
-      headline="Hide God's Word in Your Heart"
-      description="Bite-sized, playful practice that makes verses stick for life."
-      features={[
-        'A path of units: Salvation, Peace, Strength, Love and more',
-        'Five quiz types that grow with you',
-        'Hearts, XP, daily goals and confetti celebrations',
-        'Spaced repetition and a friendly lamb to cheer you on',
-      ]}
-      verse={{ text: 'Thy word have I hid in mine heart, that I might not sin against thee.', reference: 'Psalm 119:11 · KJV' }}
-    />
+    <Screen>
+      <SegmentedControl
+        options={[
+          { value: 'memorize', label: 'Memorize' },
+          { value: 'trivia', label: 'Trivia' },
+          { value: 'characters', label: 'People' },
+        ]}
+        value={section}
+        onChange={setSection}
+      />
+      {section === 'memorize' && <MemorizeHome />}
+      {section === 'trivia' && <TriviaHome />}
+      {section === 'characters' && <CharactersHome />}
+    </Screen>
   );
 }

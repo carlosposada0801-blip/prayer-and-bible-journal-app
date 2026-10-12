@@ -70,6 +70,8 @@ export default function RootLayout() {
           <Stack.Screen name="prayer-answer" options={fullSheet} />
           <Stack.Screen name="person-editor" options={sheet} />
           <Stack.Screen name="guided-prayer" options={immersive} />
+          <Stack.Screen name="practice" options={{ ...immersive, gestureEnabled: false }} />
+          <Stack.Screen name="verse-level" options={{ ...sheet, sheetAllowedDetents: [0.55, 1] }} />
         </Stack>
         )}
         {ready && <AchievementToast />}

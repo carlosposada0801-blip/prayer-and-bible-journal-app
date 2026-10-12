@@ -22,8 +22,8 @@ import {
 } from '@/db/bible-notes';
 import { useLive } from '@/db/live';
 import { audio, useAudio } from '@/lib/bible/audio';
-import { getChapter } from '@/lib/bible/engine';
-import { useChapter } from '@/lib/bible/hooks';
+import { getChapter, getChapterTitle } from '@/lib/bible/engine';
+import { useAsync, useChapter } from '@/lib/bible/hooks';
 import { takePendingVerse } from '@/lib/bible/navigation';
 import { haptics } from '@/lib/haptics';
 import { setPreference, usePreferences } from '@/store/preferences';
@@ -45,6 +45,7 @@ export default function ReaderScreen() {
   }, [params.book, params.chapter]);
 
   const { data: verses, loading, error } = useChapter(prefs.translation, book, chapter);
+  const { data: psalmTitle } = useAsync(() => getChapterTitle(prefs.translation, book, chapter), `${prefs.translation}.${book}.${chapter}`);
   const highlights = useLive(
     () => new Map(chapterHighlights(book, chapter).map((h) => [h.verse, h.color as HighlightColor])),
     ['highlights'],
@@ -197,6 +198,15 @@ export default function ReaderScreen() {
               <AppText variant="caption" color="textTertiary">
                 {translationInfo(prefs.translation).name}
               </AppText>
+              {psalmTitle && (
+                <AppText
+                  variant="subhead"
+                  color="textSecondary"
+                  align="center"
+                  style={{ fontStyle: 'italic', marginTop: space.md, paddingHorizontal: space.lg }}>
+                  {psalmTitle}
+                </AppText>
+              )}
             </View>
 
             {loading && !verses ? (

@@ -64,6 +64,14 @@ export async function getChapter(id: TranslationId, book: number, chapter: numbe
   return verses;
 }
 
+/** A psalm's superscription (e.g. "A Psalm of David."), if the translation has one. */
+export async function getChapterTitle(id: TranslationId, book: number, chapter: number): Promise<string | null> {
+  if (book !== 19 || !isBundled(id)) return null;
+  const database = await translationDb(id);
+  const row = await database.getFirstAsync<{ title: string }>('SELECT title FROM titles WHERE book = ? AND chapter = ?', [book, chapter]);
+  return row?.title ?? null;
+}
+
 /** All verses in a reference, in order, with their chapter numbers. */
 export async function getPassage(id: TranslationId, r: Reference) {
   const lastChapter = r.chapterEnd ?? r.chapter;
