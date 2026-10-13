@@ -25,7 +25,11 @@ let cached: Widgets | null | undefined;
 
 function widgets(): Widgets | null {
   if (cached !== undefined) return cached;
-  if (Platform.OS !== 'ios' || Constants.executionEnvironment === ExecutionEnvironment.StoreClient) {
+  if (
+    Platform.OS !== 'ios' ||
+    Constants.executionEnvironment === ExecutionEnvironment.StoreClient ||
+    Constants.expoConfig?.extra?.widgets === false // free Apple ID build (app.config.ts)
+  ) {
     cached = null;
     return cached;
   }

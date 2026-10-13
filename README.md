@@ -32,6 +32,10 @@ On Apple devices, a development build adds Home and Lock Screen widgets (Verse o
 
 Shake the phone to open the developer menu.
 
+### Install it as a real app (free, with a Mac)
+
+With Xcode and a free Apple ID you can install Abide on your Home Screen so it runs without your computer (it needs a quick refresh every 7 days). See [docs/XCODE_FREE.md](docs/XCODE_FREE.md).
+
 ## Project layout
 
 ```
