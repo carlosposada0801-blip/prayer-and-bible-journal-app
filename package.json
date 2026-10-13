@@ -56,7 +56,8 @@
     "validate": "tsx scripts/validate-content.ts",
     "build:bible": "python3 scripts/build-bible-data.py",
     "ios:free": "FREE_APPLE_ID=1 expo run:ios --device --configuration Release",
-    "ios:free:dev": "FREE_APPLE_ID=1 expo run:ios --device"
+    "ios:free:dev": "FREE_APPLE_ID=1 expo run:ios --device",
+    "mac": "expo run:ios --configuration Release"
   },
   "private": true
 }
